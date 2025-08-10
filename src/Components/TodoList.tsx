@@ -7,8 +7,13 @@ interface Props {
   isLoading: boolean;
   deletingIds: number[];
   updatingIds: number[];
-  onDelete: (todoId: number) => void;
-  onRename: (id: number, title: string, onSuccess: () => void) => void;
+  onDelete: (todoId: number, onFail: () => void) => void;
+  onRename: (
+    id: number,
+    title: string,
+    onSuccess: () => void,
+    onFail: () => void,
+  ) => void;
   onToggle: (id: number, completed: boolean) => void;
 }
 
@@ -31,9 +36,11 @@ export const TodoList: React.FC<Props> = ({
           deletingIds.includes(todo.id) ||
           updatingIds.includes(todo.id)
         }
-        onDelete={() => onDelete(todo.id)}
+        onDelete={onFail => onDelete(todo.id, onFail)}
         onToggle={completed => onToggle(todo.id, completed)}
-        onRename={(title, onSuccess) => onRename(todo.id, title, onSuccess)}
+        onRename={(title, onSuccess, onFail) =>
+          onRename(todo.id, title, onSuccess, onFail)
+        }
       />
     ))}
   </section>

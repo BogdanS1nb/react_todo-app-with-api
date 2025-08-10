@@ -25,8 +25,8 @@ export const App: React.FC = () => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [deletingIds, setDeletingIds] = useState<number[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
   const [updatingIds, setUpdatingIds] = useState<number[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!tempTodo) {
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
       });
   };
 
-  const handleDeleteTodo = (todoId: number) => {
+  const handleDeleteTodo = (todoId: number, onFail: () => void) => {
     setDeletingIds(prev => [...prev, todoId]);
     setErrorMessage('');
 
@@ -117,6 +117,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setErrorMessage('Unable to delete a todo');
+        onFail();
       })
       .finally(() => {
         setDeletingIds(prev => prev.filter(id => id !== todoId));
@@ -161,6 +162,7 @@ export const App: React.FC = () => {
     todoId: number,
     newTitle: string,
     onSuccess: () => void,
+    onFail: () => void,
   ) => {
     const trimmed = newTitle.trim();
 
@@ -187,7 +189,10 @@ export const App: React.FC = () => {
         inputRef.current?.focus();
         onSuccess();
       })
-      .catch(() => setErrorMessage('Unable to update a todo'))
+      .catch(() => {
+        setErrorMessage('Unable to update a todo');
+        onFail();
+      })
       .finally(() => {
         setUpdatingIds(prev => prev.filter(id => id !== todoId));
       });

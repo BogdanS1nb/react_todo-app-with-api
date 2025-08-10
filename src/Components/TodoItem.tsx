@@ -7,9 +7,9 @@ import { Todo } from '../types/Todo';
 interface Props {
   todo: Todo;
   isLoading: boolean;
-  onDelete: () => void;
+  onDelete: (onFail: () => void) => void;
   onToggle: (completed: boolean) => void;
-  onRename: (title: string, onSuccess: () => void) => void;
+  onRename: (title: string, onSuccess: () => void, onFail: () => void) => void;
 }
 
 export const TodoItem: React.FC<Props> = ({
@@ -34,14 +34,30 @@ export const TodoItem: React.FC<Props> = ({
     const trimmed = editTitle.trim();
 
     if (!trimmed) {
-      onDelete();
+      onDelete(() => {
+        setIsEditing(true);
+        setEditTitle(todo.title);
+        editRef.current?.focus();
+      });
 
       return;
     }
 
-    if (trimmed !== todo.title) {
-      onRename(trimmed, () => setIsEditing(false));
+    if (trimmed === todo.title) {
+      setIsEditing(false);
+      setEditTitle(todo.title);
+
+      return;
     }
+
+    onRename(
+      trimmed,
+      () => setIsEditing(false),
+      () => {
+        setIsEditing(true);
+        editRef.current?.focus();
+      },
+    );
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {

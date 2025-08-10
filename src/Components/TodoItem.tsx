@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+
 import { Todo } from '../types/Todo';
 
 interface Props {

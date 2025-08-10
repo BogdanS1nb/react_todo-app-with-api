@@ -8,7 +8,7 @@ interface Props {
   deletingIds: number[];
   updatingIds: number[];
   onDelete: (todoId: number) => void;
-  onRename: (id: number, title: string) => void;
+  onRename: (id: number, title: string, onSuccess: () => void) => void;
   onToggle: (id: number, completed: boolean) => void;
 }
 
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
         }
         onDelete={() => onDelete(todo.id)}
         onToggle={completed => onToggle(todo.id, completed)}
-        onRename={title => onRename(todo.id, title)}
+        onRename={(title, onSuccess) => onRename(todo.id, title, onSuccess)}
       />
     ))}
   </section>

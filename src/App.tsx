@@ -157,7 +157,11 @@ export const App: React.FC = () => {
     todosToUpdate.forEach(todo => handleToggleTodo(todo.id, shouldComplete));
   };
 
-  const handleRenameTodo = (todoId: number, newTitle: string) => {
+  const handleRenameTodo = (
+    todoId: number,
+    newTitle: string,
+    onSuccess: () => void,
+  ) => {
     const trimmed = newTitle.trim();
 
     if (!trimmed) {
@@ -181,6 +185,7 @@ export const App: React.FC = () => {
           prev.map(todo => (todo.id === todoId ? updated : todo)),
         );
         inputRef.current?.focus();
+        onSuccess();
       })
       .catch(() => setErrorMessage('Unable to update a todo'))
       .finally(() => {
@@ -214,7 +219,13 @@ export const App: React.FC = () => {
           />
         )}
         {tempTodo && (
-          <TodoItem todo={tempTodo} isLoading={true} onDelete={() => {}} />
+          <TodoItem
+            todo={tempTodo}
+            isLoading={true}
+            onDelete={() => {}}
+            onToggle={() => {}}
+            onRename={() => {}}
+          />
         )}
 
         {todos.length > 0 && (

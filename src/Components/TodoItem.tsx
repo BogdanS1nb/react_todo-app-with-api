@@ -9,7 +9,7 @@ interface Props {
   isLoading: boolean;
   onDelete: () => void;
   onToggle: (completed: boolean) => void;
-  onRename: (title: string) => void;
+  onRename: (title: string, onSuccess: () => void) => void;
 }
 
 export const TodoItem: React.FC<Props> = ({
@@ -33,8 +33,6 @@ export const TodoItem: React.FC<Props> = ({
     e?.preventDefault();
     const trimmed = editTitle.trim();
 
-    setIsEditing(false);
-
     if (!trimmed) {
       onDelete();
 
@@ -42,12 +40,12 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (trimmed !== todo.title) {
-      onRename(trimmed);
+      onRename(trimmed, () => setIsEditing(false));
     }
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' || e.key === 'Enter') {
       setEditTitle(todo.title);
       setIsEditing(false);
     }

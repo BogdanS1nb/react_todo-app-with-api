@@ -17,11 +17,13 @@ import { Header } from './Components/Header';
 import { TodoList } from './Components/TodoList';
 import { TodoItem } from './Components/TodoItem';
 
+type FilterType = 'all' | 'active' | 'completed';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<FilterType>('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [deletingIds, setDeletingIds] = useState<number[]>([]);
